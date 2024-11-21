@@ -1,7 +1,8 @@
+"use server"
 import { authService } from "@/applications/instance";
 import { redirect } from "next/navigation";
 
-export async function loginAction(_prevState: unknown, formData: FormData) {
+export async function loginAction(formData: FormData) {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
 
@@ -11,5 +12,7 @@ export async function loginAction(_prevState: unknown, formData: FormData) {
     if (res.success) {
         redirect("/dashboard");
     }
+
+    return res;
 
 }

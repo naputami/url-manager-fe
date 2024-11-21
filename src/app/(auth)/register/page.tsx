@@ -11,9 +11,10 @@ import {
     FormItem,
     FormLabel,
     FormMessage,
-} from "@/components/ui/form"
+} from "@/components/ui/form";
+import { Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input"
-import { useActionState } from 'react';
+import { useToast } from '@/hooks/use-toast';
 import { registerAction } from './action';
 
 const registerFormSchema = z.object({
@@ -23,7 +24,7 @@ const registerFormSchema = z.object({
 })
 
 export default function Page() {
-    const [state, formAction, _pending] = useActionState(registerAction, null);
+    const { toast } = useToast();
     const form = useForm<z.infer<typeof registerFormSchema>>({
         resolver: zodResolver(registerFormSchema),
         defaultValues: {
@@ -33,12 +34,17 @@ export default function Page() {
         },
     })
 
-    function onSubmit(values: z.infer<typeof registerFormSchema>) {
-       const data = new FormData();
-       data.append("name", values.name);
-       data.append("password", values.password);
-       data.append("email", values.email);
-       formAction(data);
+    async function onSubmit(values: z.infer<typeof registerFormSchema>) {
+        const data = new FormData();
+        data.append("name", values.name);
+        data.append("password", values.password);
+        data.append("email", values.email);
+        const { success, message } = await registerAction(data);
+        toast({
+            title: `${success === false ? 'Register Failed' : 'Register Success'}`,
+            description: `${message}`,
+            variant: `${success === false ? 'destructive' : 'default'}`,
+        })
     }
 
     return (<div>
@@ -84,10 +90,10 @@ export default function Page() {
                         </FormItem>
                     )}
                 />
-                <Button type="submit" className="w-full">Submit</Button>
+
+                <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}> {form.formState.isSubmitting && <Loader2 className="animate-spin" />}  Submit</Button>
             </form>
         </Form>
         <p className='text-lg mt-4'>Already have an account? <Link href="/login" className='text-slate-950 font-semibold'>Login </Link>here.</p>
-        {state?.success? <p>Register success</p>: <p>Regsiter failed</p>}
     </div>)
 }

@@ -21,15 +21,7 @@ export class HttpClient {
             credentials: 'include',
             body: data ? JSON.stringify(data) : undefined,
         });
-
-        if (response.status === 401) {
-            throw new Error('Unauthorized');
-        }
-
-        if (!response.ok) {
-            throw new Error(`HTTP error: ${response.status}`);
-        }
-
+        
         return response.json();
     }
 

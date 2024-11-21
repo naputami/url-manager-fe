@@ -13,7 +13,8 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useActionState } from 'react';
+import { Loader2 } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 import { loginAction } from './action';
 
 const loginFormSchema = z.object({
@@ -22,7 +23,7 @@ const loginFormSchema = z.object({
 })
 
 export default function Page() {
-    const [_state, formAction, _pending] = useActionState(loginAction, null);
+    const {toast} = useToast();
     const form = useForm<z.infer<typeof loginFormSchema>>({
         resolver: zodResolver(loginFormSchema),
         defaultValues: {
@@ -31,11 +32,18 @@ export default function Page() {
         },
     })
 
-    function onSubmit(values: z.infer<typeof loginFormSchema>) {
+
+    async function onSubmit(values: z.infer<typeof loginFormSchema>) {
         const data = new FormData();
         data.append("password", values.password);
         data.append("email", values.email);
-        formAction(data);
+        const {success, message} = await loginAction(data);
+        console.log(success);
+        toast({
+            title: `${success === false ? 'Register Failed' : 'Register Success'}`,
+            description: `${message}`,
+            variant: `${success === false ? 'destructive' : 'default'}`,
+        })
     }
 
 
@@ -70,7 +78,7 @@ export default function Page() {
                             </FormItem>
                         )}
                     />
-                    <Button type="submit" className="w-full">Submit</Button>
+                     <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}> {form.formState.isSubmitting && <Loader2 className="animate-spin" />}  Submit</Button>
                 </form>
             </Form>
             <p className='text-lg mt-4'>Don&apos;t have an account? <Link href="/register" className='text-slate-950 font-semibold'>Register </Link>here.</p>
