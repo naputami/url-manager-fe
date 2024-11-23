@@ -38,7 +38,6 @@ export default function Page() {
         data.append("password", values.password);
         data.append("email", values.email);
         const {success, message} = await loginAction(data);
-        console.log(success);
         toast({
             title: `${success === false ? 'Register Failed' : 'Register Success'}`,
             description: `${message}`,
@@ -49,7 +48,7 @@ export default function Page() {
 
     return (
         <div>
-            <h1 className="font-bold text-2xl text-center text-slate">Register Your Account Here!</h1>
+            <h1 className="font-bold text-2xl text-center text-slate">Login Here!</h1>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mt-4">
                     <FormField

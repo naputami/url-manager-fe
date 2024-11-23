@@ -1,5 +1,5 @@
 import { TYPES } from "@/infrastructure/constants/types";
-import { User } from "@/infrastructure/interfaces/user";
+import { User } from "@/infrastructure/interfaces/entities";
 import { AuthRepo } from "@/infrastructure/repositories/authRepo";
 import { inject, injectable } from "inversify";
 import "reflect-metadata";
@@ -9,7 +9,7 @@ export class AuthService {
   constructor(@inject(TYPES.authRepo) private authRepo: AuthRepo) {}
 
   async register(name: string, email: string, password: string) {
-    const data: User = {
+    const data = {
         name,
         email,
         password
@@ -24,5 +24,9 @@ export class AuthService {
     }
 
     return this.authRepo.login(data);
+  }
+
+  async logout(cookie: string){
+    return this.authRepo.logout(cookie);
   }
 }

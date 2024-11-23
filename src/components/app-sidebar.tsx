@@ -1,5 +1,5 @@
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react"
-
+"use client";
+import { Home, Tag, LinkIcon, LogOut } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -9,38 +9,48 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
+  SidebarFooter
+} from "@/components/ui/sidebar";
+import { Button } from "./ui/button";
+import {logOutAction} from "@/app/(main)/action";
+import { useToast } from "@/hooks/use-toast";
+import Link from "next/link";
+
 
 // Menu items.
 const items = [
   {
     title: "Home",
-    url: "#",
+    url: "/dashboard",
     icon: Home,
   },
   {
-    title: "Inbox",
-    url: "#",
-    icon: Inbox,
+    title: "Category",
+    url: "/categories",
+    icon: Tag,
   },
   {
-    title: "Calendar",
-    url: "#",
-    icon: Calendar,
-  },
-  {
-    title: "Search",
-    url: "#",
-    icon: Search,
-  },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
+    title: "Link",
+    url: "/links",
+    icon: LinkIcon,
   },
 ]
 
+
+
 export function AppSidebar() {
+  const {toast} = useToast();
+  const handleLogOut = async () => {
+    const res = await logOutAction();
+    if(!res){
+      toast({
+        title: "Login failed",
+        description: "Try again later",
+        variant: "destructive",
+    })
+    }
+
+  }
   return (
     <Sidebar>
       <SidebarContent>
@@ -51,10 +61,10 @@ export function AppSidebar() {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                    <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -62,6 +72,9 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <Button onClick={handleLogOut}><LogOut /> Log out</Button>
+      </SidebarFooter>
     </Sidebar>
   )
 }
