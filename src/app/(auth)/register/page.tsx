@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/app/_components/ui/button"
 import {
     Form,
     FormControl,
@@ -11,9 +11,9 @@ import {
     FormItem,
     FormLabel,
     FormMessage,
-} from "@/components/ui/form";
+} from "@/app/_components/ui/form";
 import { Loader2 } from "lucide-react";
-import { Input } from "@/components/ui/input"
+import { Input } from "@/app/_components/ui/input"
 import { useToast } from '@/hooks/use-toast';
 import { registerAction } from './action';
 

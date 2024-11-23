@@ -9,10 +9,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Input } from '@/components/ui/input';
+} from "@/app/_components/ui/table";
+import { Input } from '@/app/_components/ui/input';
 import { Edit, Trash, Search, PlusCircleIcon } from "lucide-react";
-import { Button } from '@/components/ui/button';
+import { Button } from '@/app/_components/ui/button';
 
 
 export default async function Page() {

@@ -10,7 +10,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarFooter
-} from "@/components/ui/sidebar";
+} from "@/app/_components/ui/sidebar";
 import { Button } from "./ui/button";
 import {logOutAction} from "@/app/(main)/action";
 import { useToast } from "@/hooks/use-toast";
