@@ -7,13 +7,14 @@ import {
     TableHeader,
     TableRow,
 } from "@/app/_components/ui/table";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 import { AddCategory } from "./add-category";
 import { DeleteCategory } from "./delete-category";
 import { EditCategory } from "./edit-category";
 import { Search } from "lucide-react";
 import { Category } from "@/infrastructure/interfaces/entities";
+import { Suspense } from "react";
 
 type CategoryListProps = {
     categories: Partial<Category>[];
@@ -40,6 +41,8 @@ export function CategortList({ categories }: CategoryListProps) {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
+                    {categories.length === 0 && <TableRow><TableCell colSpan={2} className="text-center">No data</TableCell></TableRow>}
+                    <Suspense fallback={<TableRow><TableCell colSpan={2}>Loading ...</TableCell></TableRow>}>
                     {categories.map((category) => (
                         <TableRow key={category.id}>
                             <TableCell className="font-medium">{category.name}</TableCell>
@@ -49,6 +52,7 @@ export function CategortList({ categories }: CategoryListProps) {
                             </TableCell>
                         </TableRow>
                     ))}
+                    </Suspense>
                 </TableBody>
             </Table>
         </div>

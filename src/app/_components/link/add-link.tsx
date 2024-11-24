@@ -22,25 +22,21 @@ import { PlusCircleIcon, Loader2 } from "lucide-react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useActionState, useState, useEffect } from "react";
+import { useActionState, useState, useEffect, startTransition } from "react";
 import { useRouter } from 'next/navigation';
-import { addNewCategoryAction } from "../(main)/categories/action";
+import { addLinkAction } from "@/app/(main)/links/action";
 
-export const categoryForm = z.object({
-    name: z.string().min(2, {
-        message: "Category name must be at least 2 characters.",
-    }).max(30, {
-        message: "Categoty name must be maximum 30 characters"
-    }),
+const addLinkForm = z.object({
+    link: z.string().url({message: "Link must be in valid URL Format"}),
 })
 
-export function AddCategory() {
-    const [state, formAction, pending] = useActionState(addNewCategoryAction, null);
+export function AddLink() {
+    const [state, formAction, pending] = useActionState(addLinkAction, null);
     const [open, setOpen] = useState(false);
-    const form = useForm<z.infer<typeof categoryForm>>({
-        resolver: zodResolver(categoryForm),
+    const form = useForm<z.infer<typeof addLinkForm>>({
+        resolver: zodResolver(addLinkForm),
         defaultValues: {
-            name: "",
+            link: "",
         },
     });
     const router = useRouter();
@@ -52,7 +48,7 @@ export function AddCategory() {
             router.refresh();
             toast({
                 title: "Success!",
-                description: "Adding new category success",
+                description: "Adding link success",
             })
         } else if (state?.success === false) {
             toast({
@@ -63,35 +59,37 @@ export function AddCategory() {
         }
     }, [state]);
 
-    function onSubmit(values: z.infer<typeof categoryForm>) {
-        setOpen(false);
-        const formData = new FormData();
-        formData.append("name", values.name);
-        formAction(formData);
+    function onSubmit(values: z.infer<typeof addLinkForm>) {
+        startTransition(async () => {
+            setOpen(false);
+            const formData = new FormData();
+            formData.append("link", values.link);
+            formAction(formData);
+        })
     }
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button>
-                    <PlusCircleIcon /> Add Category
+                    <PlusCircleIcon /> Add Link
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Add New Category</DialogTitle>
+                    <DialogTitle>Add New Link</DialogTitle>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
                     <Form {...form}>
                         <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
                             <FormField
                                 control={form.control}
-                                name="name"
+                                name="link"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Category Name</FormLabel>
+                                        <FormLabel>URL</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Category name ...." {...field} />
+                                            <Input placeholder="URL ...." {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>

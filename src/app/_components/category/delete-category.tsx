@@ -11,7 +11,7 @@ import {
     AlertDialogTrigger,
 } from "@/app/_components/ui/alert-dialog";
 import { Button } from "@/app/_components/ui/button";
-import { deleteCategoryAction } from "../(main)/categories/action";
+import { deleteCategoryAction } from "../../(main)/categories/action";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect, useActionState } from "react";
 import { Trash, Loader2 } from "lucide-react";

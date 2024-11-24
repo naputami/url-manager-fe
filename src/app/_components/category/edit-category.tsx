@@ -15,15 +15,15 @@ import {
     FormMessage,
 } from "@/app/_components/ui/form";
 import { Input } from "@/app/_components/ui/input";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Edit, Loader2 } from "lucide-react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useActionState, useState, useEffect } from "react";
+import { useActionState, useState, useEffect, startTransition } from "react";
 import { useRouter } from 'next/navigation';
-import { editCategoryAction } from "../(main)/categories/action";
+import { editCategoryAction } from "../../(main)/categories/action";
 
 type EditCategoryProps = {
     categoryId: string | undefined,
@@ -72,11 +72,13 @@ export function EditCategory({ categoryId, name }: EditCategoryProps) {
     }, [state]);
 
     function onSubmit(values: z.infer<typeof editCategoryForm>) {
+      startTransition(async() => {
         setOpen(false);
         const formData = new FormData();
         formData.append("name", values.name);
         formData.append("categoryId", values.categoryId);
         formAction(formData);
+      })
     }
 
     return (

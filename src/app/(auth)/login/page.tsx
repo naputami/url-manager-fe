@@ -38,11 +38,14 @@ export default function Page() {
         data.append("password", values.password);
         data.append("email", values.email);
         const {success, message} = await loginAction(data);
-        toast({
-            title: `${success === false ? 'Register Failed' : 'Register Success'}`,
-            description: `${message}`,
-            variant: `${success === false ? 'destructive' : 'default'}`,
-        })
+        if(success === false){
+            toast({
+                title: "Login Failed",
+                description: `${message}`,
+                variant: "destructive",
+            })
+        }
+      
     }
 
 

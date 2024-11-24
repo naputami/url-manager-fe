@@ -1,6 +1,6 @@
 import React from 'react'
 import { categoryService } from '@/applications/instance'
-import { CategortList } from '@/app/_components/category-list';
+import { CategortList } from '@/app/_components/category/category-list';
 import { getSession } from '@/utils/session';
 
 

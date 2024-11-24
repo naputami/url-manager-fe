@@ -12,3 +12,14 @@ export interface Category {
     updatedAt: Date;
     userId: string;
 }
+
+export interface Link {
+    id: string;
+    userId: string;
+    createdAt: Date;
+    updatedAt: Date;
+    summary: string;
+    link: string;
+    title: string;
+    category: Partial<Category>;
+}
