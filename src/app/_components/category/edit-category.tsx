@@ -39,7 +39,7 @@ const editCategoryForm = z.object({
     categoryId: z.string({message: "must be string"})
 })
 
-export function EditCategory({ categoryId, name }: EditCategoryProps) {
+export const EditCategory = ({ categoryId, name }: EditCategoryProps) => {
     const [state, formAction, pending] = useActionState(editCategoryAction, null);
     const [open, setOpen] = useState(false);
     const form = useForm<z.infer<typeof editCategoryForm>>({

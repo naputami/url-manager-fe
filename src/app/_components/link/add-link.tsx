@@ -30,7 +30,7 @@ const addLinkForm = z.object({
     link: z.string().url({message: "Link must be in valid URL Format"}),
 })
 
-export function AddLink() {
+export const AddLink = () => {
     const [state, formAction, pending] = useActionState(addLinkAction, null);
     const [open, setOpen] = useState(false);
     const form = useForm<z.infer<typeof addLinkForm>>({

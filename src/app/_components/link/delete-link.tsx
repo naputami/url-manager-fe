@@ -22,7 +22,7 @@ type DeleteLinkProps = {
 }
 
 
-export function DeleteLink({linkId}: DeleteLinkProps) {
+export const DeleteLink = ({linkId}: DeleteLinkProps) => {
     const [state, formData, pending] = useActionState(deleteLinkAction, null);
     const { toast } = useToast();
     const router = useRouter();

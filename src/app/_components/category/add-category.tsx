@@ -26,7 +26,7 @@ import { useActionState, useState, useEffect, startTransition } from "react";
 import { useRouter } from 'next/navigation';
 import { addNewCategoryAction } from "../../(main)/categories/action";
 
-export const categoryForm = z.object({
+const categoryForm = z.object({
     name: z.string().min(2, {
         message: "Category name must be at least 2 characters.",
     }).max(30, {
@@ -34,7 +34,7 @@ export const categoryForm = z.object({
     }),
 })
 
-export function AddCategory() {
+export const AddCategory = () => {
     const [state, formAction, pending] = useActionState(addNewCategoryAction, null);
     const [open, setOpen] = useState(false);
     const form = useForm<z.infer<typeof categoryForm>>({

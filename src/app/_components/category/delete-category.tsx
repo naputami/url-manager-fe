@@ -21,7 +21,7 @@ type DeleteCategoryProps = {
     categoryId: string | undefined,
 }
 
-export function DeleteCategory({ categoryId }: DeleteCategoryProps) {
+export const DeleteCategory = ({ categoryId }: DeleteCategoryProps) => {
     const [state, formData, pending] = useActionState(deleteCategoryAction, null);
     const { toast } = useToast();
     const router = useRouter();

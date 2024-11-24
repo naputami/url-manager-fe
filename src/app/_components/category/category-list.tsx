@@ -19,9 +19,7 @@ import { Suspense } from "react";
 type CategoryListProps = {
     categories: Partial<Category>[];
 }
-export function CategortList({ categories }: CategoryListProps) {
-
-
+export const CategortList = ({ categories }: CategoryListProps) => {
     return (
         <div className='space-y-4'>
             <div className='flex justify-between'>
