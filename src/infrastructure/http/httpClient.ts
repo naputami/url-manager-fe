@@ -44,12 +44,12 @@ export class HttpClient {
     return this.request("POST", url, data, cookie);
   }
 
-  public async put(
+  public async patch(
     url: string,
     data: Record<string, any>,
     cookie: string = ""
   ): Promise<HttpResponse> {
-    return this.request("PUT", url, data, cookie);
+    return this.request("PATCH", url, data, cookie);
   }
 
   public async delete(url: string, cookie: string = ""): Promise<HttpResponse> {
