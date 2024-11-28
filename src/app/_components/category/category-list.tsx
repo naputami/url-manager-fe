@@ -7,12 +7,9 @@ import {
     TableHeader,
     TableRow,
 } from "@/app/_components/ui/table";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
 import { AddCategory } from "./add-category";
 import { DeleteCategory } from "./delete-category";
 import { EditCategory } from "./edit-category";
-import { Search } from "lucide-react";
 import { Category } from "@/infrastructure/interfaces/entities";
 import { Suspense } from "react";
 
@@ -22,13 +19,7 @@ type CategoryListProps = {
 export const CategortList = ({ categories }: CategoryListProps) => {
     return (
         <div className='space-y-4'>
-            <div className='flex justify-between'>
-                <div className="flex w-full max-w-sm items-center space-x-2">
-                    <Input placeholder="Search ..." />
-                    <Button size="icon">
-                        <Search />
-                    </Button>
-                </div>
+            <div className='flex justify-end'>
                 <AddCategory />
             </div>
             <Table>

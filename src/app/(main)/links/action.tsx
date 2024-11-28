@@ -29,3 +29,17 @@ export async function deleteLinkAction(_prevState: unknown, formData: FormData) 
 
     return res;
 }
+
+export async function editLinkAction(_prevState: unknown, formData: FormData) {
+    const session = await getSession();
+    const data = {
+        title: formData.get("title") as string,
+        link: formData.get("link") as string,
+        summary: formData.get("summary") as string,
+        categoryId: formData.get("categoryId") as string,
+        id: formData.get("linkId") as string
+    }
+    const res = await linkService.editLink(session, data);
+
+    return res;
+}

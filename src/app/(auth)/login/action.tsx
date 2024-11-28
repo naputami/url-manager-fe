@@ -12,7 +12,7 @@ export async function loginAction(formData: FormData) {
 
     if (res.success) {
         cookieStore.set("session", res.data.sessionId as string, { secure: true })
-        redirect("/dashboard");
+        redirect("/categories");
     }
 
     return res;

@@ -1,3 +1,4 @@
+"use client";
 import {
     Dialog,
     DialogContent,
@@ -49,10 +50,12 @@ export const EditCategory = ({ categoryId, name }: EditCategoryProps) => {
             categoryId
         },
     });
-
-    console.log("category id in component ", categoryId)
     const router = useRouter();
     const { toast } = useToast();
+
+    useEffect(() => {
+        form.reset({ name, categoryId });
+    }, [name, form, categoryId]);
 
     useEffect(() => {
         if (state?.success) {
