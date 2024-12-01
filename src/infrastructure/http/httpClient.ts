@@ -18,7 +18,6 @@ export class HttpClient {
     data?: Record<string, any>,
     cookie: string = ""
   ): Promise<HttpResponse> {
-    console.log("cookie in request ", cookie)
     const response = await fetch(this.baseUrl + url, {
       method,
       headers: {
