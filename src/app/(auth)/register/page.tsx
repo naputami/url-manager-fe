@@ -42,7 +42,7 @@ export default function Page() {
         const { success, message } = await registerAction(data);
         toast({
             title: `${success === false ? 'Register Failed' : 'Register Success'}`,
-            description: `${message}`,
+            description: `${success === false ? message : 'Register Success'}`,
             variant: `${success === false ? 'destructive' : 'default'}`,
         })
     }
