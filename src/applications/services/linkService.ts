@@ -1,26 +1,34 @@
 import { TYPES } from "@/infrastructure/constants/types";
 import { Link } from "@/infrastructure/interfaces/entities";
-import { LinkRepo } from "@/infrastructure/repositories/linkRepo";
+import { HttpClient } from "@/infrastructure/http/httpClient";
+import { HttpResponse } from "@/infrastructure/interfaces/http";
 import { inject } from "inversify";
 
-
 export class LinkService {
+  constructor(@inject(TYPES.httpClient) private httpClient: HttpClient) {}
 
-    constructor(@inject(TYPES.linkRepo) private linkRepo: LinkRepo){}
+  async getAllLinks(session: string): Promise<HttpResponse<Partial<Link>[]>> {
+    return this.httpClient.get("/links", session);
+  }
 
-    async getAllLinks(session: string){
-        return this.linkRepo.getAllLinks(session);
-    }
+  async createNewLink(
+    session: string,
+    data: Pick<Link, "link">
+  ): Promise<HttpResponse<Partial<Link>>> {
+    return this.httpClient.post("/links", data, session);
+  }
 
-    async createNewLink(session: string, data: Pick<Link, "link">){
-        return this.linkRepo.createLink(session, data);
-    }
+  async deleteLink(
+    session: string,
+    id: string
+  ): Promise<HttpResponse<Partial<Link>>> {
+    return this.httpClient.delete(`/links/${id}`, session);
+  }
 
-    async deleteLink(session: string, id: string){
-        return this.linkRepo.deleteLink(session, id);
-    }
-
-    async editLink(session: string, data: Partial<Link>){
-        return this.linkRepo.editLink(session, data);
-    }
+  async editLink(
+    session: string,
+    data: Partial<Link>
+  ): Promise<HttpResponse<Partial<Link>>> {
+    return this.httpClient.patch(`/links/${data.id}`, data, session);
+  }
 }

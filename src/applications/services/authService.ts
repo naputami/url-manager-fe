@@ -1,32 +1,42 @@
 import { TYPES } from "@/infrastructure/constants/types";
 import { User } from "@/infrastructure/interfaces/entities";
-import { AuthRepo } from "@/infrastructure/repositories/authRepo";
+import { HttpClient } from "@/infrastructure/http/httpClient";
+import { HttpResponse } from "@/infrastructure/interfaces/http";
 import { inject, injectable } from "inversify";
 import "reflect-metadata";
 
 @injectable()
 export class AuthService {
-  constructor(@inject(TYPES.authRepo) private authRepo: AuthRepo) {}
+  constructor(
+    @inject(TYPES.httpClient) private httpClient: HttpClient
+  ) {}
 
-  async register(name: string, email: string, password: string) {
+  async register(
+    name: string,
+    email: string,
+    password: string
+  ): Promise<HttpResponse> {
     const data = {
-        name,
-        email,
-        password
-    }
-    return this.authRepo.register(data);
+      name,
+      email,
+      password,
+    };
+    return this.httpClient.post("/register", data);
   }
 
-  async login(email: string, password: string){
+  async login(
+    email: string,
+    password: string
+  ): Promise<HttpResponse<Partial<User>>> {
     const data: Partial<User> = {
       email,
-      password
-    }
+      password,
+    };
 
-    return this.authRepo.login(data);
+    return this.httpClient.post("/login", data);
   }
 
-  async logout(cookie: string){
-    return this.authRepo.logout(cookie);
+  async logout(cookie: string): Promise<HttpResponse> {
+    return this.httpClient.post("/logout", undefined, cookie);
   }
 }
