@@ -1,6 +1,5 @@
 import { getAllLinkAction } from "./action";
 import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell } from "@/app/_components/ui/table";
-import { getSession } from "@/utils/session";
 import dynamic from "next/dynamic";
 
 const AddLink = dynamic(() => import('../../_components/link/add-link').then((mod) => mod.AddLink), {
@@ -17,7 +16,6 @@ const EditLink = dynamic(() => import('../../_components/link/edit-link').then((
 
 export default async function Page() {
   const { data } = await getAllLinkAction();
-  const session = await getSession();
 
   return (
     <div className="space-y-4">
@@ -42,7 +40,7 @@ export default async function Page() {
               <TableCell className="font-medium">{link.category?.name}</TableCell>
               <TableCell className='space-x-3'>
                 <DeleteLink linkId={link.id} />
-                <EditLink linkObj={link} session={session} />
+                <EditLink linkObj={link} />
               </TableCell>
             </TableRow>
           ))}

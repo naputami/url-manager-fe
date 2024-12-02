@@ -34,12 +34,11 @@ import { useState, useEffect, useActionState, startTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Category, Link } from "@/infrastructure/interfaces/entities"
 import { editLinkAction } from "@/app/(main)/links/action";
-import { categoryService } from "@/applications/instance";
+import { getCategories } from "@/app/(main)/categories/action";
 
 
 type EditLinkProps = {
     linkObj: Partial<Link>;
-    session: string
 }
 
 const editLinkForm = z.object({
@@ -49,7 +48,7 @@ const editLinkForm = z.object({
     categoryId: z.string(),
     linkId: z.string()
 })
-export const EditLink = ({ linkObj, session }: EditLinkProps) => {
+export const EditLink = ({ linkObj}: EditLinkProps) => {
     const [state, formAction, pending] = useActionState(editLinkAction, null);
     const [open, setOpen] = useState(false);
     const [categories, setCategories] = useState<Partial<Category>[]>([]);
@@ -97,7 +96,7 @@ export const EditLink = ({ linkObj, session }: EditLinkProps) => {
 
     useEffect(() => {
         async function fetchData(){
-            const res = await categoryService.getCategories(session);
+            const res = await getCategories();
             setCategories(res.data);
         }
         fetchData();
