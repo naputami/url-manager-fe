@@ -6,9 +6,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/app/_components/ui/table";
-import { categoryService } from '@/applications/instance'
-import { getSession } from '@/utils/session';
+import { Search } from "@/app/_components/search";
 import dynamic from "next/dynamic";
+import { getCategories } from "./action";
 
 const AddCategory = dynamic(() => import("../../_components/category/add-category").then((mod) => mod.AddCategory), {
   loading: () => <p>Loading...</p>,
@@ -24,14 +24,20 @@ const DeleteCategory = dynamic(() => import("../../_components/category/delete-c
 
 
 
-export default async function Page() {
-  const session = await getSession();
-  const res = await categoryService.getCategories(session);
+export default async function Page(props: {
+  searchParams?: Promise<{
+    name?: string;
+  }>;
+}) {
+  const searchParams = await props.searchParams;
+  const name = searchParams?.name || '';
+  const res = await getCategories(name);
   const categories = res.data;
 
   return (
     <div className='space-y-4'>
-      <div className='flex justify-end'>
+      <div className='flex justify-between'>
+        <Search placeholder="Search categories..." query="name" />
         <AddCategory />
       </div>
       <Table>
@@ -43,15 +49,15 @@ export default async function Page() {
         </TableHeader>
         <TableBody>
           {categories.length === 0 && <TableRow><TableCell colSpan={2} className="text-center">No data</TableCell></TableRow>}
-            {categories.map((category) => (
-              <TableRow key={category.id}>
-                <TableCell className="font-medium">{category.name}</TableCell>
-                <TableCell className='space-x-3'>
-                  <EditCategory name={category?.name} categoryId={category?.id} />
-                  <DeleteCategory categoryId={category?.id} />
-                </TableCell>
-              </TableRow>
-            ))}
+          {categories.map((category) => (
+            <TableRow key={category.id}>
+              <TableCell className="font-medium">{category.name}</TableCell>
+              <TableCell className='space-x-3'>
+                <EditCategory name={category?.name} categoryId={category?.id} />
+                <DeleteCategory categoryId={category?.id} />
+              </TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </div>

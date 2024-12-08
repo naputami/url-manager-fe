@@ -1,5 +1,6 @@
 import { getAllLinkAction } from "./action";
 import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell } from "@/app/_components/ui/table";
+import { Search } from "@/app/_components/search";
 import dynamic from "next/dynamic";
 
 const AddLink = dynamic(() => import('../../_components/link/add-link').then((mod) => mod.AddLink), {
@@ -14,12 +15,28 @@ const EditLink = dynamic(() => import('../../_components/link/edit-link').then((
   loading: () => <p>Loading...</p>,
 })
 
-export default async function Page() {
-  const { data } = await getAllLinkAction();
+const FilterCategory = dynamic(() => import("../../_components/filter-category").then((mod) => mod.FilterCategory), {
+  loading: () => <p>Loading...</p>,
+})
+
+export default async function Page(props: {
+  searchParams?: Promise<{
+    title?: string;
+    category?: string;
+  }>;
+}) {
+  const searchParams = await props.searchParams;
+  const title = searchParams?.title || '';
+  const category = searchParams?.category || '';
+  const { data } = await getAllLinkAction(title, category);
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-end">
+      <div className="flex justify-between">
+        <div className="flex space-x-3">
+          <Search placeholder="Search title ..." query="title" />
+          <FilterCategory />
+        </div>
         <AddLink />
       </div>
       <Table>

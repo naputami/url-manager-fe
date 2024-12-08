@@ -3,9 +3,9 @@
 import { linkService } from "@/applications/instance";
 import { getSession } from "@/utils/session";
 
-export async function getAllLinkAction() {
+export async function getAllLinkAction(title: string, category: string) {
     const session = await getSession();
-    const res = await linkService.getAllLinks(session);
+    const res = await linkService.getAllLinks(session, title, category);
 
     return res;
 }

@@ -10,9 +10,11 @@ export class CategoryService {
   constructor(@inject(TYPES.httpClient) private httpClient: HttpClient) {}
 
   async getCategories(
+    name: string,
     cookie: string
   ): Promise<HttpResponse<Partial<Category>[]>> {
-    return this.httpClient.get("/categories", cookie);
+    const url = name? `/categories?name=${name}`: '/categories';
+    return this.httpClient.get(url, cookie);
   }
 
   async createCategory(

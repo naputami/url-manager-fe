@@ -96,7 +96,7 @@ export const EditLink = ({ linkObj}: EditLinkProps) => {
 
     useEffect(() => {
         async function fetchData(){
-            const res = await getCategories();
+            const res = await getCategories('');
             setCategories(res.data);
         }
         fetchData();

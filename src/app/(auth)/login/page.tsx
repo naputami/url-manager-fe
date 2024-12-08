@@ -16,6 +16,7 @@ import { Input } from "@/app/_components/ui/input";
 import { Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { loginAction } from './action';
+import { useProfileContext } from '@/context/profile';
 
 const loginFormSchema = z.object({
     email: z.string().email({ message: "e-mail must be in valid standard e-mail format" }),
@@ -24,6 +25,7 @@ const loginFormSchema = z.object({
 
 export default function Page() {
     const {toast} = useToast();
+    const {setProfile} = useProfileContext();
     const form = useForm<z.infer<typeof loginFormSchema>>({
         resolver: zodResolver(loginFormSchema),
         defaultValues: {
@@ -34,11 +36,13 @@ export default function Page() {
 
 
     async function onSubmit(values: z.infer<typeof loginFormSchema>) {
-        const data = new FormData();
-        data.append("password", values.password);
-        data.append("email", values.email);
-        const {success, message} = await loginAction(data);
-        if(success === false){
+        const formData = new FormData();
+        formData.append("password", values.password);
+        formData.append("email", values.email);
+        const {success, message, data} = await loginAction(formData);
+        if(success){
+          setProfile(data);
+        } else {
             toast({
                 title: "Login Failed",
                 description: `${message}`,

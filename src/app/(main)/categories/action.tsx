@@ -2,9 +2,9 @@
 import { categoryService } from "@/applications/instance";
 import { getSession } from "@/utils/session";
 
-export async function getCategories() {
+export async function getCategories(name: string) {
   const session = await getSession();
-  const res = await categoryService.getCategories(session);
+  const res = await categoryService.getCategories(name, session);
 
   return res;
 }
