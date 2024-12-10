@@ -17,6 +17,8 @@ import { Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { loginAction } from './action';
 import { useProfileContext } from '@/context/profile';
+import { useActionState, startTransition, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 const loginFormSchema = z.object({
     email: z.string().email({ message: "e-mail must be in valid standard e-mail format" }),
@@ -24,7 +26,9 @@ const loginFormSchema = z.object({
 })
 
 export default function Page() {
-    const {toast} = useToast();
+    const [state, formAction, pending] = useActionState(loginAction, null);
+    const router = useRouter();
+    const { toast } = useToast();
     const {setProfile} = useProfileContext();
     const form = useForm<z.infer<typeof loginFormSchema>>({
         resolver: zodResolver(loginFormSchema),
@@ -34,22 +38,29 @@ export default function Page() {
         },
     })
 
-
-    async function onSubmit(values: z.infer<typeof loginFormSchema>) {
-        const formData = new FormData();
-        formData.append("password", values.password);
-        formData.append("email", values.email);
-        const {success, message, data} = await loginAction(formData);
-        if(success){
-          setProfile(data);
-        } else {
+    useEffect(() => {
+        if (state?.success) {
+            const {data} = state;
+            setProfile(data);
+            router.push("/categories");
+        } else if(state?.success === false) {
             toast({
                 title: "Login Failed",
-                description: `${message}`,
+                description: `${state?.message}`,
                 variant: "destructive",
             })
         }
-      
+    }, [state]);
+
+
+    async function onSubmit(values: z.infer<typeof loginFormSchema>) {
+        startTransition(async () => {
+            const formData = new FormData();
+            formData.append("password", values.password);
+            formData.append("email", values.email);
+            formAction(formData);
+        })
+       
     }
 
 
@@ -84,7 +95,7 @@ export default function Page() {
                             </FormItem>
                         )}
                     />
-                     <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}> {form.formState.isSubmitting && <Loader2 className="animate-spin" />}  Submit</Button>
+                    <Button type="submit" className="w-full" disabled={pending}> {pending && <Loader2 className="animate-spin" />}  Submit</Button>
                 </form>
             </Form>
             <p className='text-lg mt-4'>Don&apos;t have an account? <Link href="/register" className='text-slate-950 font-semibold'>Register </Link>here.</p>

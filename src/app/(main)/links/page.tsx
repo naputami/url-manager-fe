@@ -28,7 +28,7 @@ export default async function Page(props: {
   const searchParams = await props.searchParams;
   const title = searchParams?.title || '';
   const category = searchParams?.category || '';
-  const { data } = await getAllLinkAction(title, category);
+  const res = await getAllLinkAction(title, category);
 
   return (
     <div className="space-y-4">
@@ -49,8 +49,9 @@ export default async function Page(props: {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data?.length === 0 && <TableRow><TableCell colSpan={4} className="text-center">No data</TableCell></TableRow>}
-          {data?.map((link) => (
+          {!res.success && <TableRow><TableCell colSpan={4} className="text-center">{res.message}</TableCell></TableRow>}
+          {res.success && res.data.length === 0 && <TableRow><TableCell colSpan={4} className="text-center">No data</TableCell></TableRow>}
+          {res.success && res.data.length > 0 && res.data.map((link) => (
             <TableRow key={link.id}>
               <TableCell className="font-medium"><a href={link.link} className="underline hover:cursor-pointer" target="_blank" rel="noopener noreferrer">{link.title}</a></TableCell>
               <TableCell className="font-medium">{link.summary}</TableCell>

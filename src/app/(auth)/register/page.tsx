@@ -16,6 +16,7 @@ import { Loader2 } from "lucide-react";
 import { Input } from "@/app/_components/ui/input"
 import { useToast } from '@/hooks/use-toast';
 import { registerAction } from './action';
+import { useActionState, useEffect, startTransition } from 'react';
 
 const registerFormSchema = z.object({
     name: z.string().min(3, { message: "name must be at least 3 characters" }).max(50, { message: "name must be maximum 50 caharcters" }),
@@ -24,6 +25,7 @@ const registerFormSchema = z.object({
 })
 
 export default function Page() {
+    const [state, formAction, pending] = useActionState(registerAction, null);
     const { toast } = useToast();
     const form = useForm<z.infer<typeof registerFormSchema>>({
         resolver: zodResolver(registerFormSchema),
@@ -34,16 +36,29 @@ export default function Page() {
         },
     })
 
+    useEffect(() => {
+        if (state?.success) {
+            toast({
+                title:'Registration Success',
+                description: `${state?.message}` ,
+                variant: 'default',
+            })  
+        } else if(state?.success === false) {
+            toast({
+                title: "Registration Failed",
+                description: `${state?.message}`,
+                variant: "destructive",
+            })
+        }
+    }, [state]);
+
     async function onSubmit(values: z.infer<typeof registerFormSchema>) {
-        const data = new FormData();
-        data.append("name", values.name);
-        data.append("password", values.password);
-        data.append("email", values.email);
-        const { success, message } = await registerAction(data);
-        toast({
-            title: `${success === false ? 'Register Failed' : 'Register Success'}`,
-            description: `${success === false ? message : 'Register Success'}`,
-            variant: `${success === false ? 'destructive' : 'default'}`,
+        startTransition(async () => {
+            const formData = new FormData();
+            formData.append("name", values.name);
+            formData.append("password", values.password);
+            formData.append("email", values.email);
+            formAction(formData);
         })
     }
 
@@ -91,7 +106,7 @@ export default function Page() {
                     )}
                 />
 
-                <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}> {form.formState.isSubmitting && <Loader2 className="animate-spin" />}  Submit</Button>
+                <Button type="submit" className="w-full" disabled={pending}> {pending && <Loader2 className="animate-spin" />}  Submit</Button>
             </form>
         </Form>
         <p className='text-lg mt-4'>Already have an account? <Link href="/login" className='text-slate-950 font-semibold'>Login </Link>here.</p>

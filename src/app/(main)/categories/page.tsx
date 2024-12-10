@@ -32,7 +32,7 @@ export default async function Page(props: {
   const searchParams = await props.searchParams;
   const name = searchParams?.name || '';
   const res = await getCategories(name);
-  const categories = res.data;
+
 
   return (
     <div className='space-y-4'>
@@ -48,8 +48,9 @@ export default async function Page(props: {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {categories.length === 0 && <TableRow><TableCell colSpan={2} className="text-center">No data</TableCell></TableRow>}
-          {categories.map((category) => (
+          {!res.success && <TableRow><TableCell colSpan={2} className="text-center">{res.message}</TableCell></TableRow>}
+          {res.success && res.data.length === 0 && <TableRow><TableCell colSpan={2} className="text-center">No data</TableCell></TableRow>}
+          {res.success && res.data.length > 0 && res.data.map((category) => (
             <TableRow key={category.id}>
               <TableCell className="font-medium">{category.name}</TableCell>
               <TableCell className='space-x-3'>
