@@ -21,7 +21,9 @@ export const FilterCategory = () => {
     useEffect(() => {
         async function fetchData() {
             const res = await getCategories('');
-            setCategories(res.data);
+            if (res.success) {
+                setCategories(res.data);
+            }
         }
         fetchData();
     }, []);
