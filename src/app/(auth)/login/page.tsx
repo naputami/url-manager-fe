@@ -41,8 +41,11 @@ export default function Page() {
     useEffect(() => {
         if (state?.success) {
             const {data} = state;
+            if(data){
+                localStorage.setItem("user", JSON.stringify(data));
+            }
             setProfile(data);
-            router.push("/categories");
+            router.push("/dashboard");
         } else if(state?.success === false) {
             toast({
                 title: "Login Failed",
