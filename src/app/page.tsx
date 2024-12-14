@@ -75,8 +75,7 @@ export default function LandingPage() {
       <footer id="contact" className="w-full bg-primary py-6 mt-16">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <h4 className="text-lg font-semibold text-primary-foreground">Contact Us</h4>
-          <p className="mt-2 text-primary-foreground">support@urlmanager.com</p>
-          <p className="text-primary-foreground">+1 800 123 456</p>
+          <p className="mt-2 text-primary-foreground">nadiapujiutami@gmail.com</p>
         </div>
       </footer>
     </div>
