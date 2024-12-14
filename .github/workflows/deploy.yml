@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      -'**/README.md'
 
 jobs:
   deploy:
@@ -26,6 +28,7 @@ jobs:
               git pull
               sudo docker compose build next --no-cache
               sudo docker compose up -d next
+              sudo docker image prune -a -f
             EOF
 
 
