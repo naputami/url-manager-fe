@@ -14,7 +14,7 @@ type ProfileContextType = {
 const ProfileContext = createContext<ProfileContextType | null>(null);
 
 export const ProfileContextProvider = ({ children }: ProfileContextProps) => {
-    const [user, setUser] = useState<Partial<User> | null>(null);
+    const [user, setUser] = useState<Partial<User>>({name: '', email: ''});
     
     const setProfile = (user: Partial<User>) => {
         setUser(user);

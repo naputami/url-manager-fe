@@ -43,4 +43,8 @@ export class LinkService {
   ): Promise<HttpResponse<Partial<Link>>> {
     return this.httpClient.patch(`/links/${data.id}`, data, session);
   }
+
+  async getLatestLink(session: string): Promise<HttpResponse<Partial<Link>[]>> {
+    return this.httpClient.get("/latest-links", session);
+  }
 }
