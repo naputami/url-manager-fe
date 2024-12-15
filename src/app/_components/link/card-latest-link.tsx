@@ -10,7 +10,7 @@ export const CardLatestLink = ({ link }: CardLatestLinkProps) => {
         <Card>
             <CardHeader>
                 <CardTitle><a href={link.link} className="underline hover:cursor-pointer" target="_blank" rel="noopener noreferrer">{link.title}</a></CardTitle>
-                <CardDescription>Created at: {link.createdAt? new Date(link.createdAt).toLocaleDateString() : ''}</CardDescription>
+                <CardDescription>Created at: {link.createdAt? new Date(link.createdAt).toLocaleDateString("en-GB") : ''}</CardDescription>
                 <Badge className="w-fit mt-2">{link.category?.name}</Badge>
             </CardHeader>
             <CardContent>
